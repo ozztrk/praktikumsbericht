@@ -1,0 +1,255 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} % Für Bilder
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{lipsum} % Generiert Beispielinhalte
+
+\usepackage[ngerman]{babel} % Ersetze 'english' mit 'ngerman' für die deutsche Sprache
+
+% Zur Anmerkung
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+
+\definecolor{myorange}{RGB}{255,165,0}
+
+\newtcolorbox{mybox}{
+  colback=myorange!10,
+  colframe=myorange,
+  boxrule=0.5pt,
+  boxsep=0pt,
+  arc=4pt,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt,
+  sharp corners,
+  titlerule=0pt,
+  title={\textbf{Anmerkung}},
+}
+
+% Der Umfang des Praktikantenberichts ohne Deckblatt beträgt mindestens acht Seiten, davon maximal zwei Seiten Abbildungen, Tabellen und Gliederungsübersicht (nähere Regelungen entnehmen Sie ggf. den Bekanntmachungen Ihrer Fakultät auf Moodle).
+
+\title{ML Engineering in der Praxis: Ein Bericht über mein Praktikum bei Prenode}
+\author{Ozan Öztürk}
+\date{19.02.2024}
+
+\begin{document}
+\linespread{1.5}
+
+\maketitle
+
+\section*{Erklärung}
+Ich erkläre hiermit, dass ich diesen Bericht selbstständig verfasst habe. \\
+Unterschrift: \_\_\_\_\_\_\_\_\_\_\_
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{Glossar}
+\begin{description}
+\item[Federated Learning] Ein Machine Learning-Ansatz, der das Modelltraining über mehrere dezentrale Geräte verteilt, wobei die Daten lokal bleiben, um Datenschutzbedenken zu minimieren.
+\item[Modellaggregation] Der Prozess, bei dem mehrere lokal trainierte Modelle zu einem einzigen, verbesserten Modell zusammengeführt werden, was ein zentraler Mechanismus des Federated Learning ist.
+\item[Edge Computing] Die Verarbeitung von Daten am Rand des Netzwerks, nahe der Datenquelle, was die Latenzzeit verringert und die Effizienz verbessert.
+\item[DevOps] Eine Praxis, die die Zusammenarbeit und Kommunikation zwischen Softwareentwicklern und IT-Profis verbessert, um den Softwareentwicklungsprozess zu automatisieren und zu beschleunigen.
+\item[MLOps] Eine Reihe von Praktiken, die ML-Systementwicklung und -betrieb integrieren, um den Lebenszyklus von ML-Modellen zu vereinfachen und zu optimieren.
+\item[Logger] Werkzeug zur Aufzeichnung von Ereignissen oder Prozessen, die während der Ausführung von Software oder Systemen auftreten, was für die Fehlersuche und Überwachung unerlässlich ist.
+\item[Backend] Der Teil einer Anwendung oder eines Systems, der im Hintergrund läuft und Funktionen wie Datenverarbeitung und -speicherung, API-Integration und Server-Management umfasst.
+\item[Virtualisierung] Die Erstellung einer virtuellen Version von etwas, wie einem Betriebssystem, einem Server oder einem Netzwerk, um die Effizienz und Verfügbarkeit von Ressourcen zu steigern.
+\item[Container] Leichtgewichtige, portable Umgebungen, die es ermöglichen, Anwendungen samt ihren Abhängigkeiten in isolierten Prozessen auszuführen.
+\item[Polyrepository] Eine Entwicklungspraxis, bei der für jedes Projekt oder jeden Mikroservice ein separates Repository verwendet wird, was die Unabhängigkeit und Modularität fördert.
+\item[Microservice] Eine Architektur, die eine Anwendung als Sammlung kleiner, unabhängiger Dienste strukturiert, die über wohldefinierte APIs miteinander kommunizieren.
+\end{description}
+
+\newpage
+
+\section{Einleitung}
+Mein Praktikum bei Prenode bot mir die Gelegenheit, tiefer in die Welt der Entwicklung einzutauchen und praktische Erfahrungen in einem innovativen und forschungsorientierten Umfeld zu sammeln. In einer Zeit, in der KI die Grenzen des Möglichen neu definiert und in fast jedem Aspekt unseres Lebens Anwendung findet, stand ich vor der Herausforderung, mein theoretisches Wissen in praktische Lösungen umzusetzen. Dieser Bericht skizziert meine Reise durch das Praktikum, beginnend mit einer Vorstellung des Unternehmens Prenode und meiner Rolle innerhalb des Teams. Im Fokus stehen die Hauptaktivitäten und Beiträge, die ich während meines Praktikums leisten konnte, insbesondere im Bereich des Federated Learning, einer innovativen Methode des maschinellen Lernens, die Datenschutz und dezentrale Datenverarbeitung in den Vordergrund stellt.
+\newline
+Neben der technischen Arbeit beinhaltet dieser Bericht auch Erfahrungen und Erkenntnisse, die ich während meiner Zeit bei Prenode gewonnen habe. Es wird ein Einblick in die Herausforderungen und Erfolge gegeben, die sowohl auf persönlicher als auch auf professioneller Ebene bedeutsam waren. Ziel ist es, nicht nur meine Beiträge und Lernergebnisse zu dokumentieren, sondern auch die Verbindung zwischen theoretischem Wissen und dessen Anwendung in der Praxis zu beleuchten.
+\newline
+Die folgenden Abschnitte bieten einen detaillierten Einblick in die Projekte, die ich bearbeitet habe, die technischen und methodischen Ansätze, die ich verfolgt habe, sowie die Schlüsselerkenntnisse, die ich aus dieser Erfahrung mitnehme.
+
+\section{Vorstellung des Praktikumsbetriebes}
+Prenode ist ein Unternehmen, das sich auf die Umgestaltung industrieller Prozesse durch den Einsatz von Internet of Things (IoT) und künstlicher Intelligenz (KI) spezialisiert hat. Unser Ansatz zielt darauf ab, die Industrielandschaft unserer Kunden intelligenter, effizienter und datengetriebener zu gestalten. Wir bieten ein umfassendes Spektrum an Dienstleistungen, das von der strategischen Planung über die Softwareentwicklung bis hin zum Betrieb und Support reicht. Um unsere Kunden optimal zu unterstützen, bieten wir Workshops und Beratung an.
+\newline
+Ein besonderer Schwerpunkt von Prenode liegt auf dem Gebiet des Federated Learning. Diese Expertise wurde durch die Auszeichnung als „KI-Champion Baden-Württemberg“ anerkannt und von Gartner hervorgehoben. Dies unterstreicht unsere Position als eines der wenigen Unternehmen, das sich auf KI-Lösungen mit föderierten Daten spezialisiert hat.
+\newline
+Wir sind Teil des Factory-X Konsortiums, das darauf abzielt, gemeinsame Standards für die Digitalisierung in der produzierenden Industrie zu etablieren. Unsere Kompetenz im Bereich IIoT und KI wurde durch die erfolgreiche Umsetzung von Industrieprojekten unter Beweis gestellt. Zu unseren Projekten zählen unter anderem die intelligente Überwachung von Anlagen in Zusammenarbeit mit IBM und Predictive Maintenance für WEISSER-Präzisionsdrehmaschinen.
+\newline
+Ein weiteres bedeutendes Projekt wurde mit TRUMPF durchgeführt, bei dem wir die Softwarebasis für das innovative Geschäftsmodell „Pay-per-Part“ entwickelten. Für diese Zusammenarbeit wurden wir mit dem Microsoft Intelligent Manufacturing Award 2023 in der Kategorie „SCALE“ ausgezeichnet. Unsere Erfahrungen umfassen die Konzeption, Entwicklung und Implementierung von IIoT-Infrastrukturen sowie datengetriebenen Lösungen, die speziell auf die Bedürfnisse unserer Kunden und die hohen Anforderungen der Industrie zugeschnitten sind.
+
+\section{Hauptaktivitäten und Beiträge}
+In diesem Abschnitt werde ich einen Überblick über meine Hauptaktivitäten und Beiträge im Rahmen des KOEX Forschungsprojekts geben. Dieses Projekt konzentriert sich auf die Bewältigung von Sicherheitsrisiken in ERP-Systemen im Zuge der digitalen Transformation von Unternehmensprozessen. Dabei nutze ich Technologien wie Maschinelles Lernen, Federated Learning, Cloud Computing und andere, um Lösungen zur Identifizierung von Betrug und Risiken zu entwickeln. Meine Aktivitäten erstrecken sich von der Forschung und Entwicklung bis zur Optimierung von Services, insbesondere im Bereich der Betrugserkennung in Videostreams.
+
+\subsection{KOEX Forschungsprojekt}
+Das Forschungsprojekt (Kollaboratives Machine Learning zur Erkennung von Fraud und Risiken in ERP-Systemen), konzentriert sich auf die Entwicklung von Lösungen zur Bewältigung der steigenden Sicherheitsrisiken, die mit der digitalen Transformation von Unternehmensprozessen einhergehen. Im Kern steht die Nutzung von Maschinellem Lernen, um betrügerisches Verhalten und interne Risiken in ERP-Systemen effektiv zu identifizieren. Traditionelle Ansätze, die auf starren Regeln basieren, stoßen hierbei schnell an ihre Grenzen, da sie nicht in der Lage sind, sich dynamisch an neue Betrugsmuster anzupassen. Das KOEX-Projekt strebt daher die Entwicklung eines kollaborativen, cloud-basierten Federated Learning Systems an. Dieses soll es ermöglichen, anonymisiert Daten aus verschiedenen ERP-Systemen zu analysieren, um Betrugsmuster zu erkennen, ohne sensible Informationen preiszugeben. Dadurch soll eine effizientere und datenschutzkonforme Methode zur Fraud-Erkennung etabliert werden, die es Unternehmen ermöglicht, ihre internen Sicherheitsmaßnahmen signifikant zu verbessern.
+
+\subsubsection{Verwendung und Analyse verschiedener FL Frameworks}
+Vor der erstellung eines Simulierten federiertem Trainings in einem Notebook. Musste ich mich erstmal mit dem Federiertem lernen vertraut machen. Hierbei erstellte ich ein notebook mit OpenFL auf ein Motion detection dataset und dokumentierte meine erkenntnisse.
+
+\subsubsection{Einarbeitung in das Thema Federated Learning}
+Meine Einarbeitung in das Thema Federated Learning begann mit der Entwicklung eines initialen Notebooks, das ebenfalls auf ein Motion Detection Dataset angewendet wurde. Dieser erste Schritt zielte darauf ab, ein besseres Verständnis der Funktionsweise und der potenziellen Anwendungsbereiche von Federated Learning zu erlangen. 
+\newline
+Im weiteren Verlauf des Projekts machte ich eine umfassende Recherche über XGBoost, wie Gradient Boosting funktioniert und dessen Vor- und Nachteile.
+
+\subsubsection{Modellauswahl: Warum XGBoost?}
+Da die Daten in ERP-Systemen hauptsächlich aus tabellarischen Datensätzen bestehen, die in der Regel nicht differenzierbar sind, setzen wir auf \textbf{Gradient Boosting Modelle}. Diese Wahl begründet sich dadurch, dass Gradient Boosting Modelle in der wissenschaftlichen Literatur und auf verschiedenen Benchmarks bei der Verarbeitung tabellarischer Daten eine bessere Performance zeigen als traditionelle neuronale Netzwerke. Gradient Boosting eignet sich daher besonders gut für die Analyse und Erkennung von Mustern in den strukturierten Daten von ERP-Systemen.
+
+\subsubsection{Datenanalyse und Erstellung des Notebooks}
+Ein wesentlicher Teil meiner Tätigkeit bestand in der umfassenden Analyse, Bereinigung und Aufbereitung der Daten der SIVIS GmbH (Projektpartner) um diese für den Einsatz in Federated Learning-Experimenten vorzubereiten. In Zusammenarbeit mit Jonas Schnepf (Sivis GmbH \& Hochschule Karlsruhe) entwickelte ich außerdem ein spezielles Notebook, das die praktische Erprobung von Federated Learning ermöglichte. Dieses Notebook diente nicht nur der Veranschaulichung des Konzepts, sondern auch der Identifikation  spezifischer Herausforderungen.
+\newline
+Ich beschäftigte mich im Notebook mit drei unterschiedlichen Ansätzen des Machine Learnings: zentralisiertem (traditionellem) Machine Learning, bei dem sämtliche Daten in einem einzigen Modell verarbeitet werden; isoliertem Training, bei dem jedes Edge-Device bzw. jedes Leaf seinen eigenen Datensatzteil nutzt, um individuelle Modelle zu trainieren; und dem federierten Ansatz bzw. im Kontext des XGBoost-Modells dem sequenziellen Lernen. Bei letzterem wird das Modell schrittweise mit Teildatensätzen trainiert, wodurch ein fortlaufend aktualisiertes globales Modell entsteht.
+Die Performance der drei Ansätze wurden anschließend visualisiert und evaluiert. Diese Vorgehensweise legte den Grundstein für die Durchführung von Federated Learning-Experimenten in einem umfassenderen Rahmen.
+
+\subsubsection{Vorstellung und erste Anwendung des MLX-Frameworks}
+Nach meiner Einarbeitung in das MLX-Framework bei Prenode, das den Einsatz von Machine Learning über verschiedene Kundensysteme hinweg ermöglicht und dabei Datenschutz sowie Sicherheit durch den Einsatz von Federated Learning und Sequential Transfer Learning gewährleistet, konnte ich mich vertiefend mit der technischen Umsetzung beschäftigen. Ich richtete die MLX-Entwicklungsumgebung ein und erarbeitete mir ein fundiertes Verständnis der zugrundeliegenden Codebasis. Anschließend widmete ich mich dem Testen verschiedener Trainingsmethoden, insbesondere dem isolierten und federierten Lernen unter Verwendung von XGBoost-Modellen. Diese praktische Anwendung innerhalb des MLX-Frameworks war entscheidend für die Bewertung der Effektivität von Federated Learning innerhalb dieser speziellen Umgebung und schuf einen weiteren Baustein für die Durchführung zukünftiger Experimente.
+
+\subsection{Entwicklung und Optimierung des MLX Frameworks}
+Sobald ich ein tieferes Verständnis des MLX Frameworks und der Codebase erlangt hatte, konzentrierte ich mich auf die Entwicklung und Optimierung des Frameworks. Hierbei lag der Schwerpunkt auf der Implementierung von Verbesserungen und Erweiterungen, die die Effizienz und Flexibilität des Frameworks steigern sollten. Außerdem sollten einige funktionen Aktualisiert werden.
+\newline
+Um diese Aufgaben erfolgreich zu bewältigen, war es erforderlich, mich mit zwei wichtigen Tools vertraut zu machen. Docker (Containerisierung) und Microsoft Azure (Cloud Computing Plattform)
+
+\subsubsection{Containerisierung mit Docker}
+Da Containerisierung im Bereich der Softwareentwicklung immer wichtiger wird, und ein zentrales Tool in der Entwicklung von MLX und anderen Projekten ist, habe ich im weiteren Verlauf Docker intensiv gelernt und genutzt. Docker ermöglicht es, Anwendungen in Containern zu verpacken, wodurch sie leichter zwischen verschiedenen Umgebungen transportiert und skaliert werden können, ohne dass die typischen \textit{'Es funktioniert nicht auf meinem System'}-Probleme auftreten. Durch die Nutzung von Docker konnte ich eine konsistente Entwicklungsumgebung für das gesamte Team sicherstellen, was die Produktivität erheblich steigert und den Aufwand für die Einrichtung und Verwaltung von Entwicklungs-, Test- und Produktionsumgebungen reduziert. Darüber hinaus erleichtert Docker die Implementierung von Microservices-Architekturen, indem es die Isolation und Unabhängigkeit der einzelnen Dienste gewährleistet. Diese Architektur ist besonders bei MLX von entscheidender Bedeutung, da sie die Grundlage für eine skalierbare und effiziente Servicebereitstellung bildet.
+\subsubsection{Azure Cloud Computing Plattform}
+Parallel zur Containerisierung und Docker beschäftigte ich mich auch mit Azure Cloud Computing. In der modernen Softwareentwicklung sind Virtualisierung und flexible Ressourcennutzung entscheidend. Azure Cloud-Dienste ermöglichen es, Rechenkapazitäten, Speicher und andere IT-Ressourcen und Dienste über das Internet bereitzustellen und dynamisch an den Bedarf anzupassen. Diese Kombination hat zu einer erheblichen Optimierung unserer Infrastrukturkosten geführt und die Skalierbarkeit sowie die Verfügbarkeit unserer Anwendungen verbessert. Die Kombination von Docker-Containerisierung und Azure Cloud Computing bietet uns eine äußerst effektive und moderne Infrastruktur, die unter anderem für Projekte wie MLX von entscheidender Bedeutung ist.
+
+\subsubsection{Logging}
+Durch die Migration von AWS (Amazon Cloud Provider) zu Azure (Microsoft) musste ich den Logger im Python- und JavaScript-Backend neu konfigurieren und anpassen, um sicherzustellen, dass er reibungslos in der neuen Umgebung funktioniert. Zusätzlich war es wichtig, dass der Logger und die damit verbundenen Services auch im Offline-Modus fehlerfrei arbeiten und keine Probleme verursachen.
+\newline
+Mein tieferes Eintauchen in die Welt der Logger hat mir gezeigt, wie unverzichtbar sie für das Monitoring und die Fehlerbehebung in Softwarestrukturen sind. Den wahren Nutzen von Log-Einträgen erfasste ich erst richtig, als ich selbst auf Fehler stieß und sie zur Lösungsfindung nutzen konnte. Auch beim Machine Learning und MLOps spielen Logger eine wichtige Rolle. Sie ermöglichen die präzise Überwachung und Protokollierung der Trainings- und Inferenzprozesse von Modellen. Dies umfasst die Erfassung von Informationen über Modellleistung, Datenverarbeitungsschritte, Hyperparameter-Anpassungen und mehr. Durch das Festhalten dieser Details in Log-Dateien können Data Scientists und ML-Ingenieure den Trainingsfortschritt nachvollziehen, Probleme schneller identifizieren und die Modellentwicklung sowie den Einsatz effizienter gestalten.
+\newline
+Die Nutzung von Log-Levels ist hierbei entscheidend. Sie gliedern die Log-Daten nach Wichtigkeit in Kategorien wie Debug, Info, Warn, Error und Critical. So können Entwickler sicherstellen, dass nur die relevanten Informationen erfasst werden, was das Finden und Beheben von Fehlern erleichtert.
+\subsubsection{DevOps}
+Im Zusammenhang mit Containern und der Cloud konnte ich in den Bereichen DevOps, insbesondere GitHub Actions und CI/CD (Continuous Integration und Continuous Deployment) erfahrung sammeln. DevOps bezieht sich auf die nahtlose Zusammenarbeit zwischen Entwicklung und Betrieb, um Softwareentwicklung und Bereitstellung zu optimieren. Ihr Hauptziel besteht darin, die Softwareentwicklung und Bereitstellung effizienter zu gestalten, indem sie Prozesse automatisiert.
+\begin{itemize}
+    \item \textbf{Github Actions:} \newline
+    Während meines Praktikums habe ich GitHub Actions genutzt. Diese Funktion von GitHub ermöglicht es, automatisierte Workflows für die Softwareentwicklung zu erstellen. Dadurch konnten wir Entwicklungsprozesse automatisieren, wie das Testen von Code (Automatisierte Tests), das Erstellen von Anwendungen und die Bereitstellung von Updates.
+
+    \item \textbf{CI/CD:} \newline
+    Continuous Integration und Continuous Deployment sind essentielle Praktiken in der modernen Softwareentwicklung. Dabei wird der Code kontinuierlich getestet und integriert, was eine zuverlässige und schnelle Bereitstellung von Softwareänderungen ermöglicht.
+\end{itemize}
+Ein konkretes Beispiel aus meiner Praxiserfahrung ist die Einrichtung eines CI/CD-Workflows in GitHub Actions. Dieser Workflow wurde ausgelöst, sobald neuer Code in den Hauptzweig (main) oder den Entwicklungsbranch (develop) gepusht wurde. Im Rahmen dieses Workflows wurden Docker-Container erstellt, in Azure Container Registry hochgeladen und schließlich in einer Azure-VM gestartet. Dieser automatisierte Prozess ermöglichte es uns, das MLX Framework effizient zu entwickeln und zu aktualisieren.
+\newline
+DevOps, GitHub Actions und CI/CD sind in der heutigen Softwareentwicklung von entscheidender Bedeutung, und ich bin froh, dass ich während meines Praktikums die Möglichkeit hatte, diese Fähigkeiten zu erlernen und anzuwenden. Sie tragen maßgeblich zur Beschleunigung der Entwicklung und Bereitstellung von Software bei und tragen zur Effizienzsteigerung im Entwicklungsprozess bei.
+
+\subsubsection{Anpassung der Microservices-Architektur}
+Nachdem ich mich bereits gut in die MLX-Codebasis eingearbeitet hatte, konnte ich einige Möglich-keiten zur Verbesserung erkennen und hatte auch gleich Ideen, wie ich sie umsetzen könnte. Eine dieser ideen war die große Polyrepository etwas leichter für die Wartung, und Entwicklung zu machen mit weniger Overhead. Um den Entwicklungsprozess zu verbessern, habe ich einige Änderungen an der Architektur vorgeschlagen. Zuerst habe ich überlegt, ob wir die vorhandenen Microservices vereinfachen könnten, indem wir sie zusammenführen. Dies hätte die Komplexität erheblich reduziert, war jedoch im Rahmen des Praktikums sehr aufwendig. Daher entschied ich mich zunächst dafür, alle Repositories in drei verschiedene zusammenzufassen. Dies hätte das Überprüfen und Verwalten der Codes erleichtert. Darüber hinaus habe ich einen gemeinsamen Ordner analysiert und festgestellt, dass der Großteil des Codes in andere Repositories bzw. Microservices verschoben werden könnte. Außerdem habe ich erkannt, dass der Logger nicht unbedingt in einem gemeinsamen Repository sein musste.
+
+\subsection{Optimierung des Video-Masking Services}
+Während meines Praktikums erfolgt auch die Optimierung eines Services, der mittels Künstlicher Intelligenz Videostreams aus der Produktion anonymisierte, indem er Personen durch schwarze Bounding Boxes unkenntlich machte. Die bestehende Lösung erwies sich als sehr ressourcenintensiv und zeitlich ineffizient. Mein erster Auftrag war die Entwicklung eines Algorithmus, der Intervalle für die Durchführung von Inferenzen festlegt, um Ressourcen zu schonen. Aufgrund der begrenzten Wirksamkeit dieses Ansatzes bekam ich die Gelegenheit, alternative Methoden vorzuschlagen. Ich entschied mich für den Einsatz des Objekterkennungsmodells YOLOv5, welches das vormals genutzte Segmentierungsmodell ersetzte.
+\newline
+Die Implementierung des YOLO-Modells und die damit verbundene Anpassung im Backend und in der Datenbank erforderten eine tiefgreifende Änderung der bisherigen Prozesskette. Eine wichtige Neuerung war, dass nicht mehr automatisch für jedes Video eine neue, maskierte Version erstellt und hochgeladen wurde. Stattdessen wurden Videos, in denen keine Personen erkannt wurden, von der weiteren Bearbeitung ausgeschlossen. Dies erforderte eine Anpassung des Datenbankschemas, um zu dokumentieren, ob ein neues Video generiert wurde oder nicht, sowie die Integration dieser Logik in das Front- und Backend. Durch diese strategischen Anpassungen wurde nicht nur ``der gesamte Prozess mindestens um den Faktor 10'' verkürzt, sondern auch der Ressourcenverbrauch des Services optimiert.
+
+\subsection{FML - Experimente und Forschungsaktivitäten}
+Im Rahmen meines Praktikums wurden Experimente im Bereich des Federated Machine Learning (FML) durchgeführt, mit dem Ziel, die Leistung von FML bei der Betrugserkennung zu demonstrieren. Diese Experimente nutzten MLflow für das Tracking und die Verwaltung der Modelle und stellten eine systematische Untersuchung der Effektivität von FML im Vergleich zu zentralisiertem und individuellem Training dar.
+
+\subsubsection{Experimentdesign und Methodik}
+Die Experimente basierten auf der Generierung synthetischer Daten. Es wurden drei Trainingsmethoden verglichen: 
+\begin{itemize}
+    \item \textbf{Zentralisiertes Training:} Bei dem ein Modell auf den Daten aller Teilnehmer trainiert wird.
+    \item \textbf{Individuelles Training:} Bei dem jeder Teilnehmer ein Modell auf eigenen Daten trainiert.
+    \item \textbf{Federiertes Training:} Bei dem Modelle individuell trainiert und anschließend aggregiert werden. 
+\end{itemize}
+
+\subsubsection{Methodik und Datengenerierung}
+Um realistische Bedingungen zu simulieren, generierten wir synthetische Daten, die verschiedene Szenarien der Betrugsverteilung und Datenmenge widerspiegelten. Die Trainingsmethoden umfassten zentralisiertes Training, individuelles Training und federiertes Training, wobei letzteres besonders im Fokus stand. Die Datengenerierung basierte auf der Annahme, dass 5\% der Prozesse Betrugsfälle darstellen.
+
+\subsubsection{Ziele und Forschungsfragen}
+
+Das Hauptziel der Experimente bestand darin, die Effektivität von Federated Learning in der Betrugserkennung zu demonstrieren. Konkret adressierten wir folgende Forschungsfragen:
+\begin{itemize}
+    \item Wie wirkt sich FML auf Teilnehmer mit deutlich weniger Daten aus?
+    \item Welchen Einfluss hat FML auf Teilnehmer mit unterschiedlichen Verteilungen von Betrugsfällen?
+    \item Wie performt FML im Vergleich zu zentralisiertem Training und individuellem (isoliertem) Training?
+\end{itemize}
+\newline
+Diese Fragen leiteten die Gestaltung und Ausführung unserer Experimente.
+
+\subsubsection{Datenpartitionierung und Labeling}
+
+Für die Experimente im Bereich des Federated Machine Learning (FML) implementierten wir drei spezifische Ansätze der Datenpartitionierung, um die Anpassungsfähigkeit des dezentralen Lernens an unterschiedliche realistische Szenarien zu bewerten. Diese Ansätze simulierten verschiedene Konstellationen zwischen zwei hypothetischen Unternehmen, repräsentiert durch die Teilnehmer, und umfassten:
+
+\begin{enumerate}
+    \item \textbf{Ausgeglichene Partitionierung:} Hierbei wurden die Datensätze so verteilt, dass beide Unternehmen über eine identische Verteilung von Betrugsarten und eine gleiche Anzahl an Datensätzen verfügten. Dieses Szenario diente als Basisbedingung zur Bewertung der Effizienz von FML unter idealisierten Bedingungen.
+    
+    \item \textbf{Unausgeglichene Datenmenge:} In diesem Setup verfügte ein Teilnehmer über nur 20\% der Datenmenge des anderen. Das Ziel war, die Leistungsfähigkeit von FML in Situationen zu testen, in denen ein Unternehmen signifikant weniger Daten zur Verfügung hat, und zu beobachten, wie FML diese Limitation ausgleichen kann.
+    
+    \item \textbf{Unausgeglichene Betrugsarten:} Die Daten eines Teilnehmers (Firma A) enthielten Betrugsarten, die im Datensatz des anderen Teilnehmers (Firma B) fehlten, und umgekehrt. Dies untersuchte die Fähigkeit von FML, Modelle zu trainieren, die ein breites Spektrum von Betrugsarten erkennen können, selbst wenn spezifische Arten von Betrug nur bei einzelnen Teilnehmern vorhanden sind.
+\end{enumerate}
+\newline
+Zur Unterstützung einer differenzierten Analyse der Modellperformance unter diesen Bedingungen wurden zwei Arten von Labels verwendet: \textit{no-fraud/fraud} zur Kennzeichnung des Vorhandenseins von Betrug und \textit{Art des Betrugs}, um spezifische Betrugsfälle zu identifizieren. Diese Strategie ermöglichte es, die allgemeine Effektivität von FML in der Betrugserkennung sowie die Sensitivität der Modelle gegenüber verschiedenen Betrugsarten zu bewerten.
+\newline
+Diese methodische Datenpartitionierung und ermöglichte eine gründliche Untersuchung der Flexibilität und Anpassungsfähigkeit von FML an eine Vielzahl von realistischen Unternehmensszenarien und bot tiefe Einblicke in die Potenziale und Grenzen dieser Technologie für die Betrugserkennung.
+
+
+\subsubsection{Erkenntnisse und Analyse}
+Die Experimente zeigten, dass FML besonders in Szenarien mit datenschutzrechtlichen Einschrän-kungen und unausgeglichener Datenverteilung Vorteile bietet. Durch den Vergleich der Trainingsmethoden konnten wir feststellen, dass FML in der Lage ist, die Modellperformance zu verbessern, selbst wenn einzelne Teilnehmer über limitierte oder spezifische Datensätze verfügen. Diese Erkenntnisse unterstreichen das Potenzial von FML, den Datenschutz zu verbessern, ohne die Genauigkeit der Betrugserkennung signifikant zu beeinträchtigen.
+
+\section{Prozesse im Arbeitsalltag}
+In meinem Praktikum bei Prenode waren strukturierte Arbeitsprozesse und Projektmanagement entscheidend für den Ablauf und die Umsetzung von Projekten. Die Nutzung agiler Methoden und spezifischer Tools ermöglichte es dem Team, flexibel auf Veränderungen zu reagieren und Qualität sowie Effizienz zu gewährleisten.
+\subsection{Meetings}
+Meetings spielen eine entscheidende Rolle im täglichen Betrieb jeder Organisation, da sie als Plattform für Kommunikation, Zusammenarbeit und Entscheidungsfindung dienen. In diesem Abschnitt werden wir uns mit den verschiedenen Meetings befassen, die während meines Praktikums einen integralen Bestandteil des Arbeitsalltags bildeten. Diese Meetings haben unterschiedliche Zwecke, angefangen von der Aktualisierung des Teams über den täglichen Fortschritt bis hin zur Diskussion strategischer Entscheidungen. Lassen Sie uns jeden dieser Punkte im Detail erkunden.
+\begin{itemize}
+    \item \textbf{Daily Standup:} \newline
+    Dieses tägliche Meeting am Vormittag dient dazu, den Arbeitstag zu beginnen und das Team auf den aktuellen Stand zu bringen. In kurzen, präzisen Updates teilen die Teammitglieder ihre Fortschritte, Herausforderungen und Ziele für den Tag. Dies fördert die Transparenz im Team und ermöglicht es, frühzeitig auf eventuelle Hindernisse zu reagieren und die Arbeit effizient zu koordinieren.
+    
+    \item \textbf{Weekly Meeting:} \newline
+    Jeden Montagmorgen findet das wöchentliche Meeting statt, in dem die Teammitglieder einen Überblick über die anstehenden Aufgaben und Neuigkeiten für die Woche erhalten. Dies ist eine Gelegenheit, um wichtige Projektpläne und -ziele zu besprechen und sicherzustellen, dass alle im Team auf dem gleichen Stand sind.
+    
+    \item \textbf{Monthly Meeting:} \newline
+    Das monatliche Meeting am ersten Montag im Monat bietet einen noch breiteren Blick auf die anstehenden Aufgaben und Neuigkeiten. Hier werden nicht nur die wöchentlichen Pläne, sondern auch andere Themen, die das Unternehmen und die Mitarbeiter betreffen, behandelt. Dies fördert den langfristigen Überblick und ermöglicht es, strategische Entscheidungen zu treffen.
+    
+    \item \textbf{ML INT Meeting}: \newline
+    Alle zwei Wochen am Montagnachmittag findet das Machine Learning spezifische Meeting statt. Hier konzentrieren sich die Teilnehmer auf alle Aspekte, die mit ML in Verbindung stehen. Es bietet eine Plattform für Fragen, Fortschritte und Lösungsansätze im ML-Bereich, insbesondere für das Koex-Projekt.
+    
+    \item \textbf{KOEX Jour Fixe:} \newline
+    Das monatliche Jour Fixe am letzten Freitag des Monats ist ein ausführliches Meeting, das über drei Stunden dauert. Es konzentriert sich auf aktuelle Fortschritte im Forschungsprojekt und den verschiedenen Arbeitspaketen. Darüber hinaus werden die Fortschritte der Masterthesen einiger Studenten diskutiert. Dieses Meeting dient auch dazu, eventuelle Probleme zu identifizieren und Lösungsansätze zu diskutieren sowie organisatorische Angelegenheiten zu klären.
+\end{itemize}
+
+\subsection{Abläufe und Projektmanagement-Methoden}
+In diesem Abschnitt stelle ich den konkreten Prozess vor, wie wir im Praktikum Projektmanagement und Softwareentwicklung praktisch umgesetzt haben. Dabei wird der Fokus auf die Arbeit mit Asana und GitHub gelegt, die uns als wesentliche Werkzeuge dienten.
+\newline
+Die Arbeit begann mit der Auswahl einer neuen Aufgabe aus dem Sprint-Backlog in Asana. Diese Aufgaben waren klar definiert und ggf. einem Teammitglied zugeordnet. Sobald ich eine Aufgabe übernahm, verschob ich sie in Asana in den Status ``In Bearbeitung''. Während der Entwicklung, die hauptsächlich auf Feature-Branches in GitHub stattfand, war es wichtig, regelmäßig Änderungen zu commiten und zu pushen, um die Fortschritte festzuhalten. Nach der Entwicklungsphase kam das Testen und Dokumentieren. Hierbei achtete ich darauf, dass die Aufgabe nicht nur technisch funktioniert, sondern auch gut dokumentiert ist, damit andere Teammitglieder meine Arbeit nachvollziehen können.
+\newline
+War eine Aufgabe abgeschlossen, erstellte ich in GitHub einen Pull Request und fügte den Link dazu in Asana hinzu. Das gab dem Reviewer die Möglichkeit, meine Änderungen zu überprüfen. Im Review-Prozess wurde dann der Code verglichen und, falls nötig, ausprobiert. Bei Rückfragen oder Anmerkungen konnte ich direkt im Pull Request darauf eingehen. Wurde der Code für gut befunden und erfüllte er alle Definitionen von "\textit{Fertig}" – beispielsweise durch Bestehen aller Tests und ausreichende Dokumentation –, wurde er in den Entwicklungsbranch (main) überführt. War dies nicht der Fall, ging die Aufgabe zurück an mich mit entsprechenden Kommentaren, was verbessert werden musste.
+\newline
+Abschließend, nach erfolgreichem Review und Merge, wurde die Feature-Branch gelöscht und die Aufgabe in Asana als "\textit{Erledigt}" markiert. Diese strukturierte Vorgehensweise ermöglichte es uns, effizient und zielgerichtet zu arbeiten, wobei die Qualitätssicherung durch den Review-Prozess stets im Vordergrund stand.
+
+
+\section{Persönliches Fazit}
+Mein Praktikum bei Prenode hat mir umfassende Einblicke in die praktische Anwendung von Machine Learning-Technologien, insbesondere im Bereich des Federated Learning, geboten. Durch die Mitarbeit am KOEX Forschungsprojekt konnte ich die Herausforderungen und Potenziale des Einsatzes von kollaborativem Machine Learning zur Betrugserkennung in ERP-Systemen erkunden. Die Auseinandersetzung mit verschiedenen FL-Frameworks und die Entwicklung eines auf XGBoost basierenden Modells haben nicht nur mein technisches Verständnis vertieft, sondern auch die Bedeutung von Datenschutz und effizienter Datenanalyse in der modernen Unternehmensumgebung verdeutlicht.
+\newline
+Durch die Optimierung des MLX Frameworks, einschließlich der Arbeit mit Docker und Cloud Computing-Diensten, der Implementierung von DevOps-Praktiken und der Anpassung der Micro-services-Architektur konnte ich wertvolle Erfahrungen im Bereich der Softwareentwicklung und -wartung sammeln. Die praktische Arbeit an der Optimierung des Video-Masking Services verdeutlichte die Bedeutung von effizienten Algorithmen und Modellen zur Verarbeitung von Echtzeitdaten. Dieses Projekt hat nicht nur die Relevanz von Machine Learning für die Verbesserung von Datenschutz und Sicherheit aufgezeigt, sondern auch die Notwendigkeit einer ständigen technologischen Weiterentwicklung betont.
+Insgesamt bot mir das Praktikum bei Prenode eine einzigartige Gelegenheit, mein Wissen und meine Fähigkeiten in einem innovativen und forschungsintensiven Umfeld anzuwenden und zu erweitern. Die Erfahrungen und Erkenntnisse, die ich während meiner Praktikumszeit gewonnen habe, bilden eine solide Grundlage für meine zukünftige Karriere im Bereich Machine Learning und Softwareentwicklung. Ich bin überzeugt, dass die während des Praktikums entwickelten Kompetenzen und das erlangte Verständnis für die Anwendung von ML in realen Geschäftsprozessen wesentlich zu meinem beruflichen Werdegang beitragen werden.
+
+
+\listoffigures
+\newpage
+
+% Beispiel für Abbildungen
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{example-image-a}
+\caption{Beispielbild 1}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{example-image-b}
+\caption{Beispielbild 2}
+\end{figure}
+
+
+
+
+
+\begin{thebibliography}{9}
+\bibitem{referenz1} Autor, \emph{Titel des Buchs}, Verlag, Jahr.
+% Füge weitere Referenzen nach Bedarf hinzu
+\end{thebibliography}
+
+\end{document}
